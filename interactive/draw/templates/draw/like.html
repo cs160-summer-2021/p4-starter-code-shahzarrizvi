@@ -120,8 +120,7 @@
 <script>
     var url = window.location.href;
 
-    var socket = new WebSocket(
-        'ws://' + window.location.host + '/ws/draw');
+    var socket = new WebSocket('ws://' + window.location.host + '/ws/draw');
 
     $('.heart-btn').on("click", function(e) {
 		$(this).find('img').toggle();
@@ -138,9 +137,7 @@
         } else {
             socket.send("{\"diff\" : " + -1 + "}")
         }
-        /* send like to socket */
 	});
-
 
     socket.onmessage = function(receivedMessage) {
     }
@@ -148,6 +145,5 @@
     socket.onclose = function(e) {
         console.error('Chat socket closed unexpectedly');
     };
-
 </script>
 </html>

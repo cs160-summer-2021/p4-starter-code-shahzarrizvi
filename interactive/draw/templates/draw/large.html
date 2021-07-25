@@ -10,6 +10,9 @@
     <script type="text/javascript" src="{% static 'draw/vendor/jquery/jquery-3.3.1.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'draw/vendor/paper/paper-full.min.js' %}"></script>
 
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet' type='text/css'>
+
     <style type="text/css">
         .title {
             margin-top: 4vh;
@@ -22,14 +25,29 @@
         }
 
         .info {
+            padding: 15px 15px 15px 15px;
             height: 30%;
         }
 
         .chat {
+            padding: 15px 15px 15px 15px;
+            overflow-y: scroll;
             height: 70%;
         }
 
+        .text { 
+            font-size: 30px;
+            font-family: 'Nunito';
+            font-weight: bold;
+        }
+
+        .comment {
+            border-bottom: 1px solid grey;
+            width: 100%;
+        }
+
         .likes {
+            padding: 10px 10px 10px 10px;
             height: 9vh;
         }
 
@@ -50,38 +68,56 @@
             <div class = "col-sm-8 work bg-primary">
             </div>
             <div class = "col-sm-4">
-                <div class = "row info bg-success"></div>
-                <div class = "row chat bg-warning"></div>
+                <div class = "row info">
+                    <div class = "text">
+                        <p> 
+                            <i> Wandering </i> <br>
+                            by Shahzar
+                        </p>
+                        <p style = "font-size:20px;">Shahzar is a student at UC Berkeley studying Computer Science, Statistics, and Mathematics. He enjoys, reading, writing, and philosophy.</p>
+                    </div>
+                    
+                </div>
+                <div class = "row chat">
+                    <div class = "overflow-auto" style = "width: 100%">
+                    </div>
+
+                </div>
             </div>
         </div>
-        <div class = "row likes bg-danger">
+        <div class = "row likes">
+            <img src = "../../static/filled-like.png" style = "height:75px; width: auto;">
+            <div class = "text" style = "font-size:50px;" id = "like-count">
+                &nbsp 0
+            </div>
         </div>
     </div>
 </body>
 <script>
     var likes = 0;
     var url = window.location.href;
-
-    var socket = new WebSocket(
-        'ws://' + window.location.host + '/ws/draw');
+    var socket = new WebSocket('ws://' + window.location.host + '/ws/draw');
 
     socket.onmessage = function(receivedMessage) {
         var received = JSON.parse(receivedMessage.data);
         console.log("Received: " + JSON.stringify(received));
 
-        if ('diff' in received) {
-            likes += received['diff'];
-            console.log(likes);   
+        if ("diff" in received) {
+            likes += received["diff"];
+            console.log(likes);
+            $("#like-count").html("\&nbsp" + likes);
         }
         
-        if ('comment' in received) {
-            console.log(received['comment'])
+        if ("comment" in received) {
+            comment = received["comment"]
+            var d = new Date()
+            console.log(d.getHours() + ":" + d.getMinutes());
+            $(".overflow-auto").prepend("<div class = \"comment text\">" + comment +"</div>")
         }
     }
 
     socket.onclose = function(e) {
         console.error('Chat socket closed unexpectedly');
     };
-
 </script>
 </html>

@@ -107,9 +107,7 @@
 </body>
 <script>
     var url = window.location.href;
-
-    var socket = new WebSocket(
-        'ws://' + window.location.host + '/ws/draw');
+    var socket = new WebSocket('ws://' + window.location.host + '/ws/draw');
 
     socket.onmessage = function(receivedMessage) {
     }
@@ -117,6 +115,5 @@
     socket.onclose = function(e) {
         console.error('Chat socket closed unexpectedly');
     };
-
 </script>
 </html>
