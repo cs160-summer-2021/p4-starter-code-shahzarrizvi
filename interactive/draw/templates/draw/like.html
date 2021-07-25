@@ -13,10 +13,10 @@
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 
     <style type="text/css">
-        .comment {
+        .details {
             font-size: 70px;
             font-family: 'Open Sans', sans-serif;
-            margin-top: 4vh;
+            margin-top: 2vh;
         }
 
         .btn-post {
@@ -53,6 +53,12 @@
             width: 33.3333333vw;
         }
 
+        .heart-container {
+            font-size: 120px;
+            text-align: center;
+            height: 75vh;
+        }
+
         .center-btn {
             margin: 0;
             position: absolute;
@@ -76,15 +82,17 @@
     <div class = "title">
         <img src = "../../static/ouvre.png">
     </div>
-    <div class = "container comment">
-        <form>
-            <div class="form-group">
-                <label for="formMessage">Leave a comment!</label>
-                <textarea class="form-control form-control-lg" rows="15"></textarea>
-            <div class = "center">
-                <button type="submit" class="btn btn-post">Post</button>
-            </div>
-        </form>
+    <div class = "container details">
+        <p>Work: <br>
+        Author: </p>
+    </div>
+
+    <div class = "center heart-container">
+        <div class = "center-btn heart-btn">
+            
+            <img src = "../../static/blank-like.png" style = "height:600px; width: auto;">
+            <img src = "../../static/filled-like.png" style = "height:600px; width: auto; display: none;">
+        </div>
     </div>
 
     <div class = "container-fluid bar">
@@ -116,13 +124,12 @@
 <script>
     const params = new URLSearchParams(window.location.search);
 
-    $('.center-btn').on("click", function(e) {
+    $('.heart-btn').on("click", function(e) {
 		$(this).find('img').toggle();
         /* send like to socket */
 	});
 
     var tool = new paper.Tool();
-    // getting the URL (you may want to use for Exercise 3)
     var url = window.location.href;
 
     var socket = new WebSocket(
@@ -139,22 +146,7 @@
     socket.onmessage = function(receivedMessage) {
         var received = JSON.parse(receivedMessage.data);
         console.log("Received: " + JSON.stringify(received));
-        // You will probably want to add some code here to draw more lines.
-        var color = received['color'].toString(16);
-        var x = received['x'];
-        var y = received['y'];
-        var uid = received['uid'];
-        if (params.get('size') == 'large') {
-            if (!paths.has(uid)) {
-                var path = new paper.Path();
-                path.strokeColor = '#' + color;
-                paths.set(uid, path);
-            }
-
-            paths.get(uid).add(x, y);
-        }
         
-        //path.add(x, y);
     }
 
     socket.onclose = function(e) {
