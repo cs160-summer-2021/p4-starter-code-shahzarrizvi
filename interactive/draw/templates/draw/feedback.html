@@ -13,10 +13,16 @@
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 
     <style type="text/css">
-        .comment {
+        .details {
             font-size: 70px;
             font-family: 'Open Sans', sans-serif;
             margin-top: 4vh;
+        }
+
+        .comment {
+            font-size: 70px;
+            font-family: 'Open Sans', sans-serif;
+            margin-top: 25vh;
         }
 
         .btn-post {
@@ -29,7 +35,7 @@
 
         .form-control-lg {
             font-size: 50px;
-            height: 60vh;
+            height: 40vh;
         }
 
         .title  {
@@ -53,6 +59,10 @@
             width: 33.3333333vw;
         }
 
+        .info {
+            height: 20vh;
+        }
+
         .center-btn {
             margin: 0;
             position: absolute;
@@ -61,12 +71,28 @@
             -ms-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%);
         }
+
+        .grid {
+            position: absolute;
+            top: 10%;
+        }
     </style>
 </head>
 <body>
     <div class = "title">
         <img src = "../../static/oeuvre.png">
     </div>
+
+    <div class = "container-fluid grid">
+        <div class = "row info">
+            <div class = "container center-btn details" style = "text-align: center" id = "work-info">
+                <p> 
+                    <i> </i> <br>
+                </p>
+            </div>
+        </div>
+    </div>
+
     <div class = "container comment">
         <form>
             <div class="form-group">
@@ -114,7 +140,21 @@
         socket.send("{\"feedback\" : \"" + feedback + "\"}");
     });
 
+    var infoStrA = "<div class = \"container center-btn details\" style = \"text-align: center\" id = \"work-info\"> <p> <i>";
+    var infoStrB = "</i> <br> by ";
+    var infoStrC = "</p> </div>";
+
     socket.onmessage = function(receivedMessage) {
+        var received = JSON.parse(receivedMessage.data);
+        if ("new" in received) {
+            if ($("#liked").is(":visible")) {
+                $('.heart-btn').find('img').toggle();
+            }
+        }
+        if ("title" in received) {
+            $("#work-info").remove();
+            $(".info").append(infoStrA + received["title"] + infoStrB + received["author"] + infoStrC);
+        }
     }
 
     socket.onclose = function(e) {

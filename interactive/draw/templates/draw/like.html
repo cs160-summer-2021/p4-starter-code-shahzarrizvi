@@ -53,10 +53,14 @@
             width: 33.3333333vw;
         }
 
+        .info {
+            height: 20vh;
+        }
+
         .heart-container {
             font-size: 120px;
             text-align: center;
-            height: 60vh;
+            height: 50vh;
         }
 
         .center-btn {
@@ -67,19 +71,24 @@
             -ms-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%);
         }
+
+        .grid {
+            position: absolute;
+            top: 10%;
+        }
     </style>
 </head>
 <body>
     <div class = "title">
         <img src = "../../static/oeuvre.png">
     </div>
-
-    <div class = "info">
-        <div class = "container center details" style = "text-align: center" id = "work-info">
-            <p> 
-                <i> Missing Half </i> <br>
-                by Ishma
-            </p>
+    <div class = "container-fluid grid">
+        <div class = "row info">
+            <div class = "container center-btn details" style = "text-align: center" id = "work-info">
+                <p> 
+                    <i> </i> <br>
+                </p>
+            </div>
         </div>
     </div>
 
@@ -89,7 +98,7 @@
             <img src = "../../static/filled-like.png" style = "height:600px; width: auto; display: none;" id = "liked">
         </div>
     </div>
-    
+
     <div class = "container-fluid bar">
         <div class = "row">
             <div class = "col bg-danger">
@@ -118,7 +127,6 @@
 </body>
 <script>
     var url = window.location.href;
-
     var socket = new WebSocket('ws://' + window.location.host + '/ws/draw');
 
     $('.heart-btn').on("click", function(e) {
@@ -131,16 +139,21 @@
         }
 	});
 
-    var infoStrA = "<div class = \"container center details\" style = \"text-align: center\" id = \"work-info\"> <p> <i>";
+    var infoStrA = "<div class = \"container center-btn details\" style = \"text-align: center\" id = \"work-info\"> <p> <i>";
     var infoStrB = "</i> <br> by ";
     var infoStrC = "</p> </div>";
 
     socket.onmessage = function(receivedMessage) {
         var received = JSON.parse(receivedMessage.data);
-        console.log("Received: " + JSON.stringify(received));
-
-        $("#work-info").remove();
-        $(".info").append(infoStrA + received["title"] + infoStrB + received["author"] + infoStrC);
+        if ("new" in received) {
+            if ($("#liked").is(":visible")) {
+                $('.heart-btn').find('img').toggle();
+            }
+        }
+        if ("title" in received) {
+            $("#work-info").remove();
+            $(".info").append(infoStrA + received["title"] + infoStrB + received["author"] + infoStrC);
+        }
     }
 
     socket.onclose = function(e) {
