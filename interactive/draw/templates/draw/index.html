@@ -12,9 +12,9 @@
 
     <style type="text/css">
         .title  {
-                margin-top: 50px;
-                display: flex;
-                justify-content: center;
+            margin-top: 4vh;
+            display: flex;
+            justify-content: center;
         }
     </style>
 
@@ -26,30 +26,6 @@
 </body>
 <script>
 
-    const params = new URLSearchParams(window.location.search);
-
-    function getRandomColor() {
-        var letters = '0123456789ABCDEF';
-        var color = '';
-        for (var i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
-    }
-
-    // setting up the canvas and one paper tool
-    var canvas = document.getElementById('myCanvas');
-    paper.setup(canvas);
-    var tool = new paper.Tool();
-    var path = new paper.Path(); 
-    var uid = Date.now() % 10000;
-    var color = getRandomColor();
-    path.strokeColor = '#' + color;  //random color per user
-    console.log(params.get('size'));
-
-    // Make a map to store paths
-    const paths = new Map();
-    paths.set(uid, path);
 
     // getting the URL (you may want to use for Exercise 3)
     var url = window.location.href;

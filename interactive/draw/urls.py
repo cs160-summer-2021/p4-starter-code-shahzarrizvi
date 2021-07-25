@@ -5,7 +5,7 @@ from . import views
 
 urlpatterns = [
     path('comment/', views.comment, name='comment'),
-    path('comment/', views.feedback, name='feedback'),
+    path('feedback/', views.feedback, name='feedback'),
     path('', views.index, name='index'),
     path('large/', views.large, name='large'),
     path('<str:room_name>/', views.room, name='room'),

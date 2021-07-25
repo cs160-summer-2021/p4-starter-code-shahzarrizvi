@@ -95,30 +95,8 @@
 
     $('.center-btn').on("click", function(e) {
 		$(this).find('img').toggle();
+        /* send like to socket */
 	});
-    
-    function getRandomColor() {
-        var letters = '0123456789ABCDEF';
-        var color = '';
-        for (var i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
-    }
-
-    // setting up the canvas and one paper tool
-    var canvas = document.getElementById('myCanvas');
-    paper.setup(canvas);
-    var tool = new paper.Tool();
-    var path = new paper.Path(); 
-    var uid = Date.now() % 10000;
-    var color = getRandomColor();
-    path.strokeColor = '#' + color;  //random color per user
-    console.log(params.get('size'));
-
-    // Make a map to store paths
-    const paths = new Map();
-    paths.set(uid, path);
 
     // getting the URL (you may want to use for Exercise 3)
     var url = window.location.href;
