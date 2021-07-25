@@ -1,6 +1,9 @@
 # chat/views.py
 from django.shortcuts import render
 
+def like(request):
+    return render(request, 'draw/like.html')
+
 def feedback(request):
     return render(request, 'draw/feedback.html')
 

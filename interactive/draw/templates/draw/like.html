@@ -4,52 +4,99 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Ouvre Display</title>
+    <title>Ouvre</title>
 
     <link rel="stylesheet" type="text/css" href="{% static 'draw/vendor/bootstrap/css/bootstrap.min.css' %}">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
     <script type="text/javascript" src="{% static 'draw/vendor/jquery/jquery-3.3.1.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'draw/vendor/paper/paper-full.min.js' %}"></script>
 
     <style type="text/css">
+        .comment {
+            font-size: 70px;
+            font-family: 'Open Sans', sans-serif;
+            margin-top: 4vh;
+        }
+
+        .btn-post {
+            border-radius: 100px;
+            font-size: 60px;
+            font-family: 'Open Sans', sans-serif;
+            height: 100px;
+            width: 100%;
+        }
+
+        .form-control-lg {
+            font-size: 50px;
+            height: 62.5vh;
+        }
+
         .title  {
             margin-top: 4vh;
             display: flex;
             justify-content: center;
         }
-    </style>
 
+        .bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .row {
+            height: 7.5vh;
+        }
+        
+        .col {
+            width: 33.3333333vw;
+        }
+
+        .center-btn {
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    </style>
 </head>
 <body>
     <div class = "title">
         <img src = "../../static/ouvre.png">
     </div>
+    <div class = "container comment">
+        <form>
+            <div class="form-group">
+                <label for="formMessage">Leave a comment!</label>
+                <textarea class="form-control form-control-lg" rows="15"></textarea>
+            <div class = "center">
+                <button type="submit" class="btn btn-post">Post</button>
+            </div>
+        </form>
+    </div>
+
+    <div class = "container-fluid bar">
+        <div class = "row">
+            <div class = "col">
+                <div class = "center-btn">
+                    <img src = "../../static/blank-heart.png" style = "height:100px; width: auto;">
+                    <img src = "../../static/filled-heart.png" style = "height:100px; width: auto; display:none;">
+                </div>
+            </div>
+            <div class = "col bg-warning"></div>
+            <div class = "col bg-success"></div>
+        </div>
+    </div>
 </body>
 <script>
-
     const params = new URLSearchParams(window.location.search);
 
-    function getRandomColor() {
-        var letters = '0123456789ABCDEF';
-        var color = '';
-        for (var i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
-    }
-
-    // setting up the canvas and one paper tool
-    var canvas = document.getElementById('myCanvas');
-    paper.setup(canvas);
-    var tool = new paper.Tool();
-    var path = new paper.Path(); 
-    var uid = Date.now() % 10000;
-    var color = getRandomColor();
-    path.strokeColor = '#' + color;  //random color per user
-    console.log(params.get('size'));
-
-    // Make a map to store paths
-    const paths = new Map();
-    paths.set(uid, path);
+    $('.center-btn').on("click", function(e) {
+		$(this).find('img').toggle();
+        /* send like to socket */
+	});
 
     // getting the URL (you may want to use for Exercise 3)
     var url = window.location.href;
