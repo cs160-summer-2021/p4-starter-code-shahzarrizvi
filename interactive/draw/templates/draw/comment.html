@@ -52,9 +52,13 @@
             width: 33.3333333vw;
         }
 
-        .heart-btn {
-            width:10px;
-            height: 10px;
+        .center-btn {
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
         }
     </style>
 </head>
@@ -75,16 +79,24 @@
 
     <div class = "container-fluid bar">
         <div class = "row">
-            <div class = "col heart-btn"><img src = "../../static/blank-heart.png"></div>
+            <div class = "col">
+                <div class = "center-btn">
+                    <img src = "../../static/blank-heart.png" style = "height:100px; width: auto;">
+                    <img src = "../../static/filled-heart.png" style = "height:100px; width: auto; display:none;">
+                </div>
+            </div>
             <div class = "col bg-warning"></div>
             <div class = "col bg-success"></div>
         </div>
     </div>
 </body>
 <script>
-
     const params = new URLSearchParams(window.location.search);
 
+    $('.center-btn').on("click", function(e) {
+		$(this).find('img').toggle();
+	});
+    
     function getRandomColor() {
         var letters = '0123456789ABCDEF';
         var color = '';
