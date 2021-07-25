@@ -111,13 +111,10 @@
 
     $('.btn-post').on("click", function(e) {
         var comment = $('#comment').val();
-        console.log(comment);
-        console.log("{\"comment\" : \"" + comment + "\"}");
         socket.send("{\"comment\" : \"" + comment + "\"}");
     });
 
     socket.onmessage = function(receivedMessage) {
-        console.log(receivedMessage.data);
     }
 
     socket.onclose = function(e) {

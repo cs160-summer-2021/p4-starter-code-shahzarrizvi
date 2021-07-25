@@ -22,17 +22,20 @@
 
         .work {
             height: 75vh;
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
         }
 
         .info {
             padding: 15px 15px 15px 15px;
-            height: 30%;
+            height: 35%;
+            border-bottom: 2px solid black;
         }
 
         .chat {
             padding: 15px 15px 15px 15px;
             overflow-y: scroll;
-            height: 70%;
+            height: 65%;
         }
 
         .text { 
@@ -56,45 +59,118 @@
             bottom:0;
             margin:0;
         }
-    </style>
 
+        .total-center {
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    </style>
 </head>
+
 <body>
     <div class = "title">
         <img src = "../../static/oeuvre.png">
     </div>
     <div class = "container-fluid">
         <div class = "row">
-            <div class = "col-sm-8 work bg-primary">
+            <div class = "col-sm-8 work bg-light">
+                <div class = "total-center" id = "work-image">
+                    <img src = "../../static/ishma.jpg" style = "max-width:100%; max-height:100%">
+                </div>
             </div>
+
             <div class = "col-sm-4">
                 <div class = "row info">
-                    <div class = "text">
+                    <div class = "text" id = "work-info">
                         <p> 
-                            <i> Wandering </i> <br>
-                            by Shahzar
+                            <i> Missing Half </i> <br>
+                            by Ishma
                         </p>
-                        <p style = "font-size:20px;">Shahzar is a student at UC Berkeley studying Computer Science, Statistics, and Mathematics. He enjoys, reading, writing, and philosophy.</p>
+                        <p style = "font-size:20px;">Ishma is a student at UC Berkeley studying Computer Science, Statistics, and Mathematics. He enjoys, reading, writing, and philosophy.</p>
                     </div>
-                    
                 </div>
                 <div class = "row chat">
                     <div class = "overflow-auto" style = "width: 100%">
+                        <div class = "text comment">
+                            I love the colors. The white highlights on that gold really make it pop! 
+                        </div>
+                        <div class = "text comment">
+                            I'm pretty sure this is a reference to Plato's androgynes!
+                        </div>
+                        <div class = "text comment">
+                            the linework is fantastic
+                        </div>
                     </div>
-
                 </div>
             </div>
         </div>
         <div class = "row likes">
             <img src = "../../static/filled-like.png" style = "height:75px; width: auto;">
             <div class = "text" style = "font-size:50px;" id = "like-count">
-                &nbsp 0
+                &nbsp 534
             </div>
         </div>
     </div>
 </body>
+
 <script>
-    var likes = 0;
+    const ishma = {
+        title: "Missing Half",
+        link: "../../static/ishma.jpg",
+        author: "Ishma",
+        bio: "Ishma is a student at UC Berkeley studying Computer Science, Statistics, and Mathematics. He enjoys, reading, writing, and philosophy.",
+        likes: 534,
+        comments: ["the linework is fantastic", "I'm pretty sure this is a reference to Plato's androgynes!", "I love the colors. The white highlights on that gold really make it pop!"],
+        feedback: []
+    }
+
+    const leigh = {
+        title: "Life Up Until Graduation",
+        link: "../../static/leigh.jpg",
+        author: "Leigh R",
+        bio: "Leigh is a third year at Cal studying art. They want to create art that focuses on understanding our experience with respect to space and time.",
+        likes: 898,
+        comments: ["lmao as a graduating senior i feel this", "The beige tones and the flat design work really well together to convey a sense of expansiveness!", "little dude looks so tiny in that big space"],
+        feedback: []
+    }
+
+    const cohen = {
+        title: "Night Waves",
+        link: "../../static/cohen.gif",
+        author: "Cohen Villegas",
+        bio: "Cohen is a PhD candidate under the EECS department at Berkeley. While Cohen's research is in machine learning, he enjoys making computer-assisted art in his free time.",
+        likes: 965,
+        comments: ["Looking at this for too long makes me feel uneasy", "The construction of this is breathtaking! I wonder what software was used to create this.", "The contrast between the shading of the waves and the circle creates a really cool effect!"],
+        feedback: []
+    }
+
+    const cecilia = {
+        title: "Untitled",
+        link: "../../static/cecilia.png",
+        author:  "Cecilia",
+        bio: "Cecilia is a recently graduated college student visiting Berkeley. She majored in computer science, but has diverse passions including art, music, and writing.",
+        likes: 1432,
+        comments: ["lmao", "love the cat memes", "The heavy strokes have an almost impasto style to them. Love the way Cecilia communicated expression, even with the thick strokes!"],
+        feedback: []
+    }
+
+    const zayd = {
+        title: "Rush Hour",
+        link: "../../static/zayd.jpg",
+        author: "Zayd",
+        bio: "Zayd is new at photography, having only taken it up since quarantine. They are especially inspired by how public spaces differ before and after quarantine.",
+        likes: 145,
+        comments: ["This kind of photo could only have been taken during quarantine.", "Love the title."],
+        feedback: []
+    }
+
+    var works = [ishma, leigh, cohen, cecilia, zayd]
+    var i = 0
+    var curr = works[i]
     var url = window.location.href;
     var socket = new WebSocket('ws://' + window.location.host + '/ws/draw');
 
@@ -103,21 +179,55 @@
         console.log("Received: " + JSON.stringify(received));
 
         if ("diff" in received) {
-            likes += received["diff"];
-            console.log(likes);
-            $("#like-count").html("\&nbsp" + likes);
+            curr['likes'] += received["diff"];
+            console.log(curr['likes']);
+            $("#like-count").html("\&nbsp" + curr['likes']);
         }
         
         if ("comment" in received) {
-            comment = received["comment"]
-            var d = new Date()
-            console.log(d.getHours() + ":" + d.getMinutes());
-            $(".overflow-auto").prepend("<div class = \"comment text\">" + comment +"</div>")
+            comment = received["comment"];
+            curr['comments'].push(comment);
+            $(".overflow-auto").prepend("<div class = \"comment text\">" + comment +"</div>");
+        }
+
+        if ("feedback" in received) {
+            feedback = received["feedback"];
+            curr["feedback"].push(feedback);
         }
     }
 
     socket.onclose = function(e) {
         console.error('Chat socket closed unexpectedly');
     };
+
+    var workStrA = "<div class = \"total-center\" id = \"work-image\"> <img src = ";
+    var workStrB = " style = \"max-width:100%; max-height:100%\"></div>"
+
+    var infoStrA = "<div class = \"text\" id = \"work-info\"> <p> <i>";
+    var infoStrB = "</i> <br> by ";
+    var infoStrC = "</p> <p style = \"font-size:20px;\"> ";
+    var infoStrD = "</p> </div>";
+
+    function newWork() {
+        i = (i + 1) % 5;
+        curr = works[i];
+
+        $("#work-image").remove();
+        $(".work").append(workStrA + curr["link"] + workStrB)
+
+        $("#work-info").remove();
+        $(".info").append(infoStrA + curr["title"] + infoStrB + curr["author"] + infoStrC + curr["bio"] + infoStrD);
+
+        $("#like-count").html("\&nbsp" + curr['likes']);
+
+        $(".comment.text").remove();
+        for (let c of curr["comments"]) {
+            $(".overflow-auto").prepend("<div class = \"comment text\">" + c +"</div>");
+        }
+
+        socket.send("{\"title\" : \"" + curr["title"] + "\", \"author\" : \"" + curr["author"] + "\"}");
+    }
+
+    var nextWork = setInterval(newWork, 5 * 1000);
 </script>
 </html>

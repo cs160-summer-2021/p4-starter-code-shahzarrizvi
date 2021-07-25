@@ -71,7 +71,7 @@
         <form>
             <div class="form-group">
                 <label for="formMessage">Send feedback!</label>
-                <textarea class="form-control form-control-lg" rows="15"></textarea>
+                <textarea class="form-control form-control-lg" rows="15" id = "feedback"></textarea>
             </div>
             <div class = "center">
                 <button type="submit" class="btn btn-post">Send</button>
@@ -108,6 +108,11 @@
 <script>
     var url = window.location.href;
     var socket = new WebSocket('ws://' + window.location.host + '/ws/draw');
+
+    $('.btn-post').on("click", function(e) {
+        var feedback = $('#feedback').val();
+        socket.send("{\"feedback\" : \"" + feedback + "\"}");
+    });
 
     socket.onmessage = function(receivedMessage) {
     }

@@ -19,12 +19,6 @@
             margin-top: 4vh;
         }
 
-        /*.comment {
-            font-size: 70px;
-            font-family: 'Open Sans', sans-serif;
-            margin-top: 4vh;
-        }*/
-
         .btn-post {
             border-radius: 100px;
             font-size: 60px;
@@ -79,9 +73,14 @@
     <div class = "title">
         <img src = "../../static/oeuvre.png">
     </div>
-    <div class = "container details">
-        <p>Work: <br>
-        Author: </p>
+
+    <div class = "info">
+        <div class = "container center details" style = "text-align: center" id = "work-info">
+            <p> 
+                <i> Missing Half </i> <br>
+                by Ishma
+            </p>
+        </div>
     </div>
 
     <div class = "center heart-container">
@@ -124,14 +123,7 @@
 
     $('.heart-btn').on("click", function(e) {
 		$(this).find('img').toggle();
-        var x = document.getElementById('liked')
-        /*if (window.getComputedStyle(x).display === 'none') {
-            console.log('liked is invisible');
-        } else {
-            console.log('liked is visible');
-        }
-        console.log($('#liked').css('display'));
-        console.log($('#liked').is(':visible'));*/
+        
         if ($('#liked').is(':visible')) {
             socket.send("{\"diff\" : " + 1 + "}")
         } else {
@@ -139,7 +131,16 @@
         }
 	});
 
+    var infoStrA = "<div class = \"container center details\" style = \"text-align: center\" id = \"work-info\"> <p> <i>";
+    var infoStrB = "</i> <br> by ";
+    var infoStrC = "</p> </div>";
+
     socket.onmessage = function(receivedMessage) {
+        var received = JSON.parse(receivedMessage.data);
+        console.log("Received: " + JSON.stringify(received));
+
+        $("#work-info").remove();
+        $(".info").append(infoStrA + received["title"] + infoStrB + received["author"] + infoStrC);
     }
 
     socket.onclose = function(e) {
