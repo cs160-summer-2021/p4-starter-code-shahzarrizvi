@@ -1,0 +1,251 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Oeuvre Display</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'draw/vendor/bootstrap/css/bootstrap.min.css' %}">
+    <script type="text/javascript" src="{% static 'draw/vendor/jquery/jquery-3.3.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'draw/vendor/paper/paper-full.min.js' %}"></script>
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet' type='text/css'>
+
+    <style type="text/css">
+        .title {
+            margin-top: 4vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        .work {
+            height: 75vh;
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+
+        .info {
+            padding: 15px 15px 15px 15px;
+            height: 35%;
+            border-bottom: 2px solid black;
+        }
+
+        .chat {
+            padding: 15px 15px 15px 15px;
+            overflow-y: scroll;
+            height: 65%;
+        }
+
+        .text { 
+            font-size: 30px;
+            font-family: 'Nunito';
+            font-weight: bold;
+        }
+
+        .comment {
+            border-bottom: 1px solid grey;
+            width: 100%;
+        }
+
+        .likes {
+            padding: 10px 10px 10px 10px;
+            height: 9vh;
+        }
+
+        .container-fluid {
+            position: absolute;
+            bottom:0;
+            margin:0;
+        }
+
+        .total-center {
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+
+<body>
+    <div class = "title">
+        <img src = "../../static/oeuvre.png">
+    </div>
+    <div class = "container-fluid">
+        <div class = "row">
+            <div class = "col-sm-8 work bg-light">
+                <div class = "total-center" id = "work-image">
+                    <img src = "../../static/ishma.jpg" style = "max-width:100%; max-height:100%">
+                </div>
+            </div>
+
+            <div class = "col-sm-4">
+                <div class = "row info">
+                    <div class = "text" id = "work-info">
+                        <p> 
+                            <i> Missing Half </i> <br>
+                            by Ishma
+                        </p>
+                        <p style = "font-size:20px;">Ishma is a student at UC Berkeley studying Computer Science, Statistics, and Mathematics. He enjoys reading, writing, and philosophy. When he has time, he likes to make art.</p>
+                    </div>
+                </div>
+                <div class = "row chat">
+                    <div class = "overflow-auto" style = "width: 100%">
+                        <div class = "text comment">
+                            I love the colors. The white highlights on that gold really make it pop! 
+                        </div>
+                        <div class = "text comment">
+                            I'm pretty sure this is a reference to Plato's androgynes!
+                        </div>
+                        <div class = "text comment">
+                            the linework is fantastic
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class = "row likes">
+            <img src = "../../static/filled-like.png" style = "height:75px; width: auto;">
+            <div class = "text" style = "font-size:50px;" id = "like-count">
+                &nbsp 534
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    const ishma = {
+        title: "Missing Half",
+        link: "../../static/ishma.jpg",
+        author: "Ishma",
+        bio: "Ishma is a student at UC Berkeley studying Computer Science, Statistics, and Mathematics. He enjoys reading, writing, and philosophy. When he has time, he likes to make art.",
+        likes: 534,
+        comments: ["the linework is fantastic", "I'm pretty sure this is a reference to Plato's androgynes!", "I love the colors. The white highlights on that gold really make it pop!"],
+        feedback: []
+    }
+
+    const leigh = {
+        title: "Life Up Until Graduation",
+        link: "../../static/leigh.jpg",
+        author: "Leigh R",
+        bio: "Leigh is a third year at Cal studying art. They want to create art that focuses on understanding our experience with respect to space and time.",
+        likes: 898,
+        comments: ["lmao as a graduating senior i feel this", "The beige tones and the flat design work really well together to convey a sense of expansiveness!", "little dude looks so tiny in that big space"],
+        feedback: []
+    }
+
+    const tamika = {
+        title: "Korea",
+        link: "../../static/tamika.jpg",
+        author: "Tamika Khan",
+        bio: "Tamika Khan is a traveling photographer who tries to capture serenity in places around the world. Her photographs highlight how places differ, but have inherent similarities.",
+        likes: 743,
+        comments: ["The composition of the photograph is really nice!", "I wanna go to Korea :)", "I love the way the gradiented sky is reflected in the water."],
+        feedback: []
+    }
+
+    const cohen = {
+        title: "Night Waves",
+        link: "../../static/cohen.gif",
+        author: "Cohen Villegas",
+        bio: "Cohen is a PhD candidate under the EECS department at Berkeley. While Cohen's research is in machine learning, he enjoys making computer-assisted art in his free time.",
+        likes: 965,
+        comments: ["Looking at this for too long makes me feel uneasy", "The construction of this is breathtaking! I wonder what software was used to create this.", "The contrast between the shading of the waves and the circle creates a really cool effect!"],
+        feedback: []
+    }
+
+    const cecilia = {
+        title: "Untitled",
+        link: "../../static/cecilia.png",
+        author:  "Cecilia",
+        bio: "Cecilia is a recently graduated college student visiting Berkeley. She majored in computer science, but has diverse passions including art, music, and writing.",
+        likes: 1432,
+        comments: ["lmao", "love the cat memes", "The heavy strokes have an almost impasto style to them. Love the way Cecilia communicated expression with the thick strokes!"],
+        feedback: []
+    }
+
+    const zayd = {
+        title: "Rush Hour",
+        link: "../../static/zayd.jpg",
+        author: "Zayd",
+        bio: "Zayd is new at photography, having only taken it up since quarantine. They are especially inspired by how public spaces differ before and after quarantine.",
+        likes: 145,
+        comments: ["This kind of photo could only have been taken during quarantine.", "Love the title."],
+        feedback: []
+    }
+
+    loopA = [ishma, leigh, tamika];
+    loopB = [cohen, cecilia, zayd];
+
+    var works = loopA;
+    var i = 0
+    var curr = works[i]
+    var url = window.location.href;
+    var socket = new WebSocket('ws://' + window.location.host + '/ws/draw');
+
+    socket.onmessage = function(receivedMessage) {
+        var received = JSON.parse(receivedMessage.data);
+        console.log("Received: " + JSON.stringify(received));
+
+        if ("diff" in received) {
+            curr['likes'] += received["diff"];
+            console.log(curr['likes']);
+            $("#like-count").html("\&nbsp" + curr['likes']);
+        }
+        
+        if ("comment" in received) {
+            comment = received["comment"];
+            curr['comments'].push(comment);
+            $(".overflow-auto").prepend("<div class = \"comment text\">" + comment +"</div>");
+        }
+
+        if ("feedback" in received) {
+            feedback = received["feedback"];
+            curr["feedback"].push(feedback);
+        }
+    }
+
+    socket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    var workStrA = "<div class = \"total-center\" id = \"work-image\"> <img src = ";
+    var workStrB = " style = \"max-width:100%; max-height:100%\"></div>"
+
+    var infoStrA = "<div class = \"text\" id = \"work-info\"> <p> <i>";
+    var infoStrB = "</i> <br> by ";
+    var infoStrC = "</p> <p style = \"font-size:20px;\"> ";
+    var infoStrD = "</p> </div>";
+
+    function newWork() {
+        i = (i + 1) % works.length;
+        curr = works[i];
+
+        $("#work-image").remove();
+        $(".work").append(workStrA + curr["link"] + workStrB)
+
+        $("#work-info").remove();
+        $(".info").append(infoStrA + curr["title"] + infoStrB + curr["author"] + infoStrC + curr["bio"] + infoStrD);
+
+        $("#like-count").html("\&nbsp" + curr['likes']);
+
+        $(".comment.text").remove();
+        for (let c of curr["comments"]) {
+            $(".overflow-auto").prepend("<div class = \"comment text\">" + c +"</div>");
+        }
+
+        socket.send("{\"new\" : " + true + ", \"title\" : \"" + curr["title"] + "\", \"author\" : \"" + curr["author"] + "\", \"link\" : \"" + curr["link"] + "\"}");
+    }
+
+    function sendInfo() {
+        socket.send("{\"title\" : \"" + curr["title"] + "\", \"author\" : \"" + curr["author"] + "\", \"link\" : \"" + curr["link"] + "\"}");
+    }
+
+    setInterval(newWork, 120 * 1000);
+    setInterval(sendInfo, 1);
+</script>
+</html>

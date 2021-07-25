@@ -1,0 +1,62 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Oeuvre</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'draw/vendor/bootstrap/css/bootstrap.min.css' %}">
+    <script type="text/javascript" src="{% static 'draw/vendor/jquery/jquery-3.3.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'draw/vendor/paper/paper-full.min.js' %}"></script>
+
+    <style type="text/css">
+        .title  {
+            margin-top: 4vh;
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+
+</head>
+<body>
+    <div class = "title">
+        <img src = "../../static/oeuvre.png">
+    </div>
+</body>
+<script>
+    var url = window.location.href;
+    var socket = new WebSocket('ws://' + window.location.host + '/ws/draw');
+
+    tool.onMouseMove = function(event) { //http://paperjs.org/reference/tool/ path examples
+        path.add(event.point);
+        socket.send("{\"x\" : " + event.point.x + ", \"y\" : " + event.point.y + ", \"uid\" : " + uid + ", \"color\" : " + parseInt(color, 16) + " }" );
+    }
+
+    socket.onmessage = function(receivedMessage) {
+        var received = JSON.parse(receivedMessage.data);
+        console.log("Received: " + JSON.stringify(received));
+        // You will probably want to add some code here to draw more lines.
+        var color = received['color'].toString(16);
+        var x = received['x'];
+        var y = received['y'];
+        var uid = received['uid'];
+        if (params.get('size') == 'large') {
+            if (!paths.has(uid)) {
+                var path = new paper.Path();
+                path.strokeColor = '#' + color;
+                paths.set(uid, path);
+            }
+
+            paths.get(uid).add(x, y);
+        }
+        
+        //path.add(x, y);
+    }
+
+    socket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+</script>
+</html>
