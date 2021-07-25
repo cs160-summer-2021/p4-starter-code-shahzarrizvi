@@ -181,9 +181,7 @@
     loopA = [ishma, leigh, tamika];
     loopB = [cohen, cecilia, zayd];
 
-    var works = loopA;
-    var i = 0
-    var curr = works[i]
+    var works = loopB;
     var url = window.location.href;
     var socket = new WebSocket('ws://' + window.location.host + '/ws/draw');
 
@@ -193,7 +191,6 @@
 
         if ("diff" in received) {
             curr['likes'] += received["diff"];
-            console.log(curr['likes']);
             $("#like-count").html("\&nbsp" + curr['likes']);
         }
         
@@ -221,6 +218,28 @@
     var infoStrC = "</p> <p style = \"font-size:20px;\"> ";
     var infoStrD = "</p> </div>";
 
+    var i = 0;
+    var curr = works[i];
+
+    function initialize() {
+        curr = works[0];
+
+        $("#work-image").remove();
+        $(".work").append(workStrA + curr["link"] + workStrB)
+
+        $("#work-info").remove();
+        $(".info").append(infoStrA + curr["title"] + infoStrB + curr["author"] + infoStrC + curr["bio"] + infoStrD);
+
+        $("#like-count").html("\&nbsp" + curr['likes']);
+
+        $(".comment.text").remove();
+        for (let c of curr["comments"]) {
+            $(".overflow-auto").prepend("<div class = \"comment text\">" + c +"</div>");
+        }
+    }
+
+    initialize(); 
+
     function newWork() {
         i = (i + 1) % works.length;
         curr = works[i];
@@ -245,7 +264,7 @@
         socket.send("{\"title\" : \"" + curr["title"] + "\", \"author\" : \"" + curr["author"] + "\", \"link\" : \"" + curr["link"] + "\"}");
     }
 
-    setInterval(newWork, 120 * 1000);
+    setInterval(newWork, 90 * 1000);
     setInterval(sendInfo, 1);
 </script>
 </html>
