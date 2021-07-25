@@ -181,7 +181,7 @@
     loopA = [ishma, leigh, tamika];
     loopB = [cohen, cecilia, zayd];
 
-    var works = loopA;
+    var works = [ishma, leigh, tamika, cohen, cecilia, zayd];
     var i = 0
     var curr = works[i]
     var url = window.location.href;
@@ -245,7 +245,7 @@
         socket.send("{\"title\" : \"" + curr["title"] + "\", \"author\" : \"" + curr["author"] + "\"}");
     }
 
-    setInterval(newWork, 5 * 1000);
+    setInterval(newWork, 120 * 1000);
     setInterval(sendInfo, 1);
 </script>
 </html>
