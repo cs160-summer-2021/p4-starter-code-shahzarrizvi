@@ -35,7 +35,7 @@
         .chat {
             padding: 15px 15px 15px 15px;
             overflow-y: scroll;
-            height: 65%;
+            height: 490px;
         }
 
         .text { 
@@ -56,6 +56,7 @@
 
         .container-fluid {
             position: absolute;
+            top: 160px;
             bottom:0;
             margin:0;
         }
@@ -181,28 +182,35 @@
     loopA = [ishma, leigh, tamika];
     loopB = [cohen, cecilia, zayd];
 
-    var works = loopB;
+    var works = [ishma, leigh, tamika, cohen, cecilia, zayd];
     var url = window.location.href;
     var socket = new WebSocket('ws://' + window.location.host + '/ws/draw');
+    var interactions = 0;
 
     socket.onmessage = function(receivedMessage) {
         var received = JSON.parse(receivedMessage.data);
-        console.log("Received: " + JSON.stringify(received));
+        /*console.log("Received: " + JSON.stringify(received));*/
 
         if ("diff" in received) {
             curr['likes'] += received["diff"];
             $("#like-count").html("\&nbsp" + curr['likes']);
+            console.log("received like");
+            interactions += 1;
         }
         
         if ("comment" in received) {
             comment = received["comment"];
             curr['comments'].push(comment);
             $(".overflow-auto").prepend("<div class = \"comment text\">" + comment +"</div>");
+            console.log("received comment");
+            interactions += 1;
         }
 
         if ("feedback" in received) {
             feedback = received["feedback"];
             curr["feedback"].push(feedback);
+            console.log("received feedback");
+            interactions += 1;
         }
     }
 
@@ -265,6 +273,6 @@
     }
 
     setInterval(newWork, 90 * 1000);
-    setInterval(sendInfo, 1);
+    setInterval(sendInfo, 100);
 </script>
 </html>
